@@ -1,0 +1,116 @@
+name: tlm_solver
+description: Solver of the two-layer climate model implementation
+
+provides:
+  name: TwoLayerModelSolver
+  description: |
+    Solver of the two-layer climate model
+  attributes:
+    two_layer_model:
+      definition:
+        description: Two-layer model to solve
+        fortran_type: type(TwoLayerModel), pointer
+    t_next:
+      definition:
+        description: Next time point
+        fortran_type: real(kind=8)
+      unit: yr
+    temperature_surface_next:
+      definition:
+        description: Surface temperature at the start of the next time point
+        fortran_type: real(kind=8)
+      unit: K
+    temperature_deep_next:
+      definition:
+        description: Deep ocean temperature at the start of the next time point
+        fortran_type: real(kind=8)
+      unit: K
+    cumulative_heat_uptake_next:
+      definition:
+        description: Cumulative heat uptake at the start of the next time point
+        fortran_type: real(kind=8)
+      unit: W yr / m^2
+
+  methods:
+    solve_euler_forward:
+      description: Solve the model using an forward Euler stepper
+      parameters:
+        erf:
+          definition:
+            description: Effective radiative forcing to use to drive the model
+            fortran_type: type(Timeseries)
+        time_eval:
+          definition:
+            description: Time axis on which to solve the model
+            fortran_type: type(TimeAxis)
+        stepper:
+          definition:
+            description: Stepper to use to solve the model
+            fortran_type: type(EulerForwardStepper)
+
+      returns:
+        definition:
+          name: res
+          description: |
+            Output timeseries
+
+            Right now, instance index of the output timeseries
+            (yes, hopefully temporary hack).
+
+            Solved timeseries:
+            1. surface ocean temperature
+            2. deep ocean temperature
+            3. cumulative (earth system) heat uptake
+          fortran_type: integer, dimension(3)
+        # forcing integers to have units was a mistake
+        unit: dimensionless
+
+    solve_rk4:
+      description: Solve the model using a Runge-Kutta 4th order stepper
+      parameters:
+        erf:
+          definition:
+            description: Effective radiative forcing to use to drive the model
+            fortran_type: type(Timeseries)
+        time_eval:
+          definition:
+            description: Time axis on which to solve the model
+            fortran_type: type(TimeAxis)
+        stepper:
+          definition:
+            description: Stepper to use to solve the model
+            fortran_type: type(RK4Stepper)
+
+      returns:
+        definition:
+          name: res
+          description: |
+            Output timeseries
+
+            Right now, instance index of the output timeseries
+            (yes, hopefully temporary hack).
+
+            Solved timeseries:
+            1. surface ocean temperature
+            2. deep ocean temperature
+            3. cumulative (earth system) heat uptake
+          fortran_type: integer, dimension(3)
+        # forcing integers to have units was a mistake
+        unit: dimensionless
+
+requirements:
+  - fortran_module: fgen_euler_forward
+    python_module: generated.fgen_euler_forward
+    provides: EulerForwardStepper
+  - fortran_module: fgen_rk
+    python_module: generated.fgen_rk
+    provides: RK4Stepper
+  - fortran_module: fgen_time
+    python_module: generated.fgen_time
+    provides: TimeAxis
+  - fortran_module: fgen_timeseries
+    python_module: generated.fgen_timeseries
+    provides: Timeseries
+  - fortran_module: two_layer_model
+    python_module: generated.two_layer_model
+    provides: TwoLayerModel

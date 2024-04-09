@@ -1,0 +1,14 @@
+format:
+  # If a statement is wrapped to more than one line, than dangle
+  dangle_parens: true
+  # How wide to allow formatted cmake files
+  line_width: 110
+  # If the statement spelling length (including space and
+  # parenthesis) is smaller than this amount, then force reject
+  # nested layouts.
+  min_prefix_chars: 0
+  # If the statement spelling length (including space and
+  # parenthesis) is larger than the tab width by more than this
+  # amount, then force reject un-nested layouts.
+  max_prefix_chars: 0
+  max_pargs_hwrap: 1

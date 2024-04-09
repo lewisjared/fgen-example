@@ -1,0 +1,79 @@
+name: two_layer_model
+description: Two-layer climate model implementation
+
+provides:
+  name: TwoLayerModel
+  description: |
+    Implementation of the two-layer climate model
+
+    Implementation of the two-layer (effective) radiative forcing driven model
+    by [Held et al.](https://journals.ametsoc.org/doi/full/10.1175/2009JCLI3466.1),
+    [Geoffroy et al.](https://journals.ametsoc.org/doi/pdf/10.1175/JCLI-D-12-00195.1)
+    and [Bloch-Johnson et al.](https://agupubs.onlinelibrary.wiley.com/doi/abs/10.1002/2015GL064240).
+  attributes:
+    lambda0:
+      definition:
+        description: |
+          Feedback factor when the surface temperature is zero.
+
+          This is generally the pre-industrial value.
+        fortran_type: real(8)
+      unit: W / m^2 / K
+    a:
+      definition:
+        description: Sensitivity of feedback factor to surface temperature
+        fortran_type: real(8)
+      unit: W / m^2 / K^2
+    efficacy:
+      definition:
+        description: Efficacy factor
+        fortran_type: real(8)
+      unit: dimensionless
+    eta:
+      definition:
+        description: Heat exchange parameter
+        fortran_type: real(8)
+      unit: W / m^2 / K
+    heat_capacity_surface:
+      definition:
+        description: Heat capacity of surface ocean
+        fortran_type: real(8)
+      unit: W yr / m^2 / K
+    heat_capacity_deep:
+      definition:
+        description: Heat capacity of deep ocean
+        fortran_type: real(8)
+      unit: W yr / m^2 / K
+
+  methods:
+    calculate:
+      description: Calculate rate of change of temperature and cumulative heat uptake
+      parameters:
+        erf:
+          definition:
+            description: Effective radiative forcing
+            fortran_type: real(8)
+          unit: W / m^2
+        temperature_surface:
+          definition:
+            description: Temperature of the surface ocean layer
+            fortran_type: real(8)
+          unit: K
+        temperature_deep:
+          definition:
+            description: Temperature of the deep ocean layer
+            fortran_type: real(8)
+          unit: K
+      returns:
+        definition:
+          name: dy_dt
+          description: |
+            Rate of change of the model's state variables:
+            1. surface ocean temperature
+            2. deep ocean temperature
+            3. cumulative (earth system) heat uptake
+          fortran_type: real(8), dimension(3)
+        unit:
+          - K / yr
+          - K / yr
+          - W / m^2

@@ -1,0 +1,12 @@
+# Changes here will be overwritten by Copier
+_commit: da4fb5e
+_src_path: ../copier-fgen-based-repository
+email: jared.lewis@climate-resource.com
+extension_module_name: _lib
+initial_setup: true
+name: Jared Lewis
+project_description_short: Example project using fgen to wrap a simple module
+project_name_human: Fgen Example
+project_name_pip: fgen-example
+project_name_python: fgen_example
+project_url: https://gitlab.com/magicc/fgen-example
