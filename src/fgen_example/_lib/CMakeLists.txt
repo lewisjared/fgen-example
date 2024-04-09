@@ -6,8 +6,8 @@
 # ~~~
 set(
   EXTENSION_MODULES
-  two_layer_model
-  two_layer_model_solver
+  derived_type
+  operations
 )
 
 # Helper variables to shorten the file definitions

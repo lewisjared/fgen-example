@@ -1,0 +1,32 @@
+name: operations
+description: "Simple operator (TODO: add support for plain functions to fgen, see https://gitlab.com/magicc/fgen/-/issues/13)"
+provides:
+  name: Operator
+  description: An example of another derived type
+
+  # TODO: remove requirement for attributes from fgen
+  # (see https://gitlab.com/magicc/fgen/-/issues/14)
+  attributes:
+    weight:
+      description: Weight to apply to operations
+      unit: dimensionless
+      fortran_type: real(8)
+  methods:
+    calc_vec_prod_sum:
+      description: Calculate vector product then sum then multiply by `self % weight`
+      # TODO: remove requirement for attributes from fgen
+      # (see https://gitlab.com/magicc/fgen/-/issues/14)
+      parameters:
+        a:
+          description: first vector
+          unit: dimensionless
+          fortran_type: real(8), dimension(3)
+        b:
+          description: second vector
+          unit: dimensionless
+          fortran_type: real(8), dimension(3)
+      returns:
+        name: vec_prod_sum
+        description: Result of doing vector product then sum then multiplying by `self % weight`
+        unit: dimensionless
+        fortran_type: real(8)
