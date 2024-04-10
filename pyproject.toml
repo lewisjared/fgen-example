@@ -14,7 +14,7 @@ requires-python = ">=3.10"
 dependencies = [
     "pint >= 0.22",
     "numpy >= 0.22",
-    "fgen == 0.3.1",
+    "fgen == 0.4.1",
 ]
 
 
