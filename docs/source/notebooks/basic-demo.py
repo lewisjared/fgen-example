@@ -18,21 +18,9 @@
 # This notebook gives a basic demonstration of how to use Fgen Example.
 
 # %%
-import openscm_units
 import pint
 
-# %% [markdown]
-# You must set the application registry before importing other packages ensure
-# the unit registry is set correctly. If you do this step after importing a
-# library that uses `fgen_runtime.verify_units`, it is too late because
-# `fgen_runtime.verify_units` will have already been called and will have
-# already set the registry to be used when entering and exiting wrapped
-# methods. This is an issue with pint's/`fgen_runtime.verify_unit`'s way of
-# doing the wrapping which we haven't tried to tackle in a neater way yet.
-
-# %%
-UR = openscm_units.unit_registry
-pint.set_application_registry(UR)
+Q = pint.get_application_registry().Quantity
 
 # %%
 import fgen_example
@@ -45,11 +33,11 @@ print(f"You are using fgen_example version {fgen_example.__version__}")
 # The auto-generated Python wrappers give Python access to derived types defined in Fortran.
 
 # %%
-dt = DerivedType.from_build_args(base=UR.Quantity(2, "m"))
+dt = DerivedType.from_build_args(base=Q(2, "m"))
 dt
 
 # %%
 dt.base
 
 # %%
-dt.add(UR.Quantity(3, "cm"))
+dt.add(Q(3, "cm"))
