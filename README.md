@@ -10,7 +10,20 @@ https://myst-parser.readthedocs.io/en/latest/syntax/organising_content.html#inse
 Example project using fgen to wrap a simple module
 
 
-[#5 badges here]
+
+[![CI](https://github.com/lewisjared/fgen-example/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/lewisjared/fgen-example/actions/workflows/ci.yaml)
+[![Coverage](https://codecov.io/gh/climate-resource/fgen-example/branch/main/graph/badge.svg)](https://codecov.io/gh/climate-resource/fgen-example)
+[![Docs](https://readthedocs.org/projects/fgen-example/badge/?version=latest)](https://fgen-example.readthedocs.io)
+
+**PyPI :**
+[![PyPI](https://img.shields.io/pypi/v/fgen-example.svg)](https://pypi.org/project/fgen-example/)
+[![PyPI: Supported Python versions](https://img.shields.io/pypi/pyversions/fgen-example.svg)](https://pypi.org/project/fgen-example/)
+[![PyPI install](https://github.com/lewisjared/fgen-example/actions/workflows/install.yaml/badge.svg?branch=main)](https://github.com/lewisjared/fgen-example/actions/workflows/install.yaml)
+
+**Other info :**
+[![License](https://img.shields.io/github/license/lewisjared/fgen-example.svg)](https://github.com/lewisjared/fgen-example/blob/main/LICENSE)
+[![Last Commit](https://img.shields.io/github/last-commit/lewisjared/fgen-example.svg)](https://github.com/lewisjared/fgen-example/commits/main)
+[![Contributors](https://img.shields.io/github/contributors/lewisjared/fgen-example.svg)](https://github.com/lewisjared/fgen-example/graphs/contributors)
 
 
 <!--- sec-end-description -->
@@ -18,7 +31,7 @@ Example project using fgen to wrap a simple module
 Full documentation can be found at:
 [fgen-example.readthedocs.io](https://fgen-example.readthedocs.io/en/latest/).
 We recommend reading the docs there because the internal documentation links
-don't render correctly on GitLab's viewer.
+don't render correctly on GitHub's viewer.
 
 ## Installation
 
@@ -66,6 +79,6 @@ through. If not, please raise an issue in the [issue tracker][issue_tracker].
 
 For the rest of our developer docs, please see [](development-reference).
 
-[issue_tracker]: https://gitlab.com/magicc/fgen-example/issues
+[issue_tracker]: https://github.com/lewisjared/fgen-example/issues
 
 <!--- sec-end-installation-dev -->
