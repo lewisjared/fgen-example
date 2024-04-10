@@ -245,3 +245,6 @@ unauthorized_licenses = [
     "gpl v1",
     "gplv1",
 ]
+[tool.liccheck.authorized_packages]
+# TODO: remove when updating fgen
+cmakelang = "0.6.13"
