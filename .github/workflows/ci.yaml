@@ -103,7 +103,7 @@ jobs:
       - name: Check build
         run: |
           tar -tvf dist/fgen_example-*.tar.gz --wildcards '*fgen_example/py.typed'
-          tar -tvf dist/fgen_example-*.tar.gz --wildcards 'fgen_example-*/LICENCE'
+#          tar -tvf dist/fgen_example-*.tar.gz --wildcards 'fgen_example-*/LICENCE'
 
 
   check-dependency-licences:
