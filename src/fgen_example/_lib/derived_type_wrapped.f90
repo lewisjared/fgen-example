@@ -1,127 +1,172 @@
+!!!
+! Wrapper for ``derived_type``
 !
-! Wrapper for mod_derived_type_manager
-! Exposes the DerivedType calculator
-!
-module w_derived_type
+! In combination with ``derived_type_manager``,
+! this allows the ``DerivedType`` derived type
+! to be exposed to Python.
+!!!
+module derived_type_w
+
+   ! Standard library requirements
    use iso_c_binding, only: c_loc, c_ptr
-   use mod_derived_type_manager, only: &
+
+   ! First-party requirements from the module we're wrapping
+   use derived_type, only: DerivedType
+   use derived_type_manager, only: &
       manager_get_free_instance => get_free_instance_number, &
       manager_instance_finalize => instance_finalize, &
-      manager_get_instance => get_instance, &
-      check_index_claimed
-
-   use derived_type, only: &
-      DerivedType
+      manager_get_instance => get_instance
 
    implicit none
    private
 
-   ! TODO: handle cases where more complicated wrappers are needed
-   public :: get_free_instance, &
+   public :: get_free_instance_number, &
              instance_build, &
              instance_finalize
 
-   ! Getters
-   public :: ig_base
-   ! Calculator methods
+   ! Statment declarations for getters and setters
+   public :: iget_base
+   public :: iset_base
+
+   ! Statement declarations for methods
    public :: i_add
    public :: i_double
+
 contains
 
-   function get_free_instance() result(model_index)
+   function get_free_instance_number() result(instance_index)
 
-      integer :: model_index
+      integer :: instance_index
 
-      model_index = manager_get_free_instance()
+      instance_index = manager_get_free_instance()
 
-   end function get_free_instance
+   end function get_free_instance_number
 
-   subroutine instance_finalize(model_index)
-
-      integer, intent(in) :: model_index
-
-      call manager_instance_finalize(model_index)
-
-   end subroutine instance_finalize
-
+   ! Build methods
    !
-   ! Build a new instance
-   !
+   ! These are a bit like Python class methods,
+   ! but they build/intialise/set up the class
+   ! rather than returning a new instance.
    subroutine instance_build( &
-      model_index, &
+      instance_index, &
       base &
       )
 
-      integer, intent(in) :: model_index
+      integer, intent(in) :: instance_index
+
       real(8), intent(in) :: base
+      ! Passing of base
+
       type(DerivedType), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
       call instance%build( &
-         base &
+         base=base &
          )
 
    end subroutine instance_build
 
-   !
-   ! Calculator accessors
-   !
+   ! Finalisation
+   subroutine instance_finalize(instance_index)
 
-   function ig_base(model_index) result(base)
+      integer, intent(in) :: instance_index
 
-      integer, intent(in) :: model_index
-      real(8) :: base
+      call manager_instance_finalize(instance_index)
+
+   end subroutine instance_finalize
+
+   ! Attributes getters and setters
+   ! Wrapping base
+   ! Strategy: WrappingStrategyDefault(
+   !     magnitude_suffix='_m',
+   ! )
+   subroutine iget_base( &
+      instance_index, &
+      base &
+      )
+
+      integer, intent(in) :: instance_index
+
+      real(8), intent(out) :: base
+      ! Returning of base
 
       type(DerivedType), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
       base = instance%base
 
-   end function ig_base
+   end subroutine iget_base
 
-   !
-   ! Calculator methods
-   !
+   subroutine iset_base( &
+      instance_index, &
+      base &
+      )
 
-   function i_add( &
-      model_index, &
-      other &
-      ) result(output)
+      integer, intent(in) :: instance_index
 
-      ! Should work out consistent approach to whether we use intent or not...
-      integer :: model_index
-      real(8) :: other
-      real(8) :: output
+      real(8), intent(in) :: base
+      ! Passing of base
 
       type(DerivedType), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
-      !&<
-      output = instance % add( &
-          other &
-          )
-      !&>
-   end function i_add
+      instance%base = base
 
-   function i_double( &
-      model_index &
-      ) result(output)
+   end subroutine iset_base
 
-      ! Should work out consistent approach to whether we use intent or not...
-      integer :: model_index
-      real(8) :: output
+   ! Wrapped methods
+   ! Wrapping output
+   ! Strategy: WrappingStrategyDefault(
+   !     magnitude_suffix='_m',
+   ! )
+   subroutine i_add( &
+      instance_index, &
+      other, &
+      output &
+      )
+
+      integer, intent(in) :: instance_index
+
+      real(8), intent(in) :: other
+      ! Passing of other
+
+      real(8), intent(out) :: output
+      ! Returning of output
 
       type(DerivedType), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
-      !&<
-      output = instance % double( &
-          )
-      !&>
-   end function i_double
+      output = instance%add( &
+               other=other &
+               )
 
-end module w_derived_type
+   end subroutine i_add
+
+   ! Wrapping output
+   ! Strategy: WrappingStrategyDefault(
+   !     magnitude_suffix='_m',
+   ! )
+   subroutine i_double( &
+      instance_index, &
+      output &
+      )
+
+      integer, intent(in) :: instance_index
+
+      real(8), intent(out) :: output
+      ! Returning of output
+
+      type(DerivedType), pointer :: instance
+
+      call manager_get_instance(instance_index, instance)
+
+      output = instance%double( &
+               )
+
+   end subroutine i_double
+
+end module derived_type_w

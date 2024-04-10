@@ -1,111 +1,153 @@
+!!!
+! Wrapper for ``operations``
 !
-! Wrapper for mod_operations_manager
-! Exposes the Operator calculator
-!
-module w_operations
+! In combination with ``operations_manager``,
+! this allows the ``Operator`` derived type
+! to be exposed to Python.
+!!!
+module operations_w
+
+   ! Standard library requirements
    use iso_c_binding, only: c_loc, c_ptr
-   use mod_operations_manager, only: &
+
+   ! First-party requirements from the module we're wrapping
+   use operations, only: Operator
+   use operations_manager, only: &
       manager_get_free_instance => get_free_instance_number, &
       manager_instance_finalize => instance_finalize, &
-      manager_get_instance => get_instance, &
-      check_index_claimed
-
-   use operations, only: &
-      Operator
+      manager_get_instance => get_instance
 
    implicit none
    private
 
-   ! TODO: handle cases where more complicated wrappers are needed
-   public :: get_free_instance, &
+   public :: get_free_instance_number, &
              instance_build, &
              instance_finalize
 
-   ! Getters
-   public :: ig_weight
-   ! Calculator methods
+   ! Statment declarations for getters and setters
+   public :: iget_weight
+   public :: iset_weight
+
+   ! Statement declarations for methods
    public :: i_calc_vec_prod_sum
+
 contains
 
-   function get_free_instance() result(model_index)
+   function get_free_instance_number() result(instance_index)
 
-      integer :: model_index
+      integer :: instance_index
 
-      model_index = manager_get_free_instance()
+      instance_index = manager_get_free_instance()
 
-   end function get_free_instance
+   end function get_free_instance_number
 
-   subroutine instance_finalize(model_index)
-
-      integer, intent(in) :: model_index
-
-      call manager_instance_finalize(model_index)
-
-   end subroutine instance_finalize
-
+   ! Build methods
    !
-   ! Build a new instance
-   !
+   ! These are a bit like Python class methods,
+   ! but they build/intialise/set up the class
+   ! rather than returning a new instance.
    subroutine instance_build( &
-      model_index, &
+      instance_index, &
       weight &
       )
 
-      integer, intent(in) :: model_index
+      integer, intent(in) :: instance_index
+
       real(8), intent(in) :: weight
+      ! Passing of weight
+
       type(Operator), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
       call instance%build( &
-         weight &
+         weight=weight &
          )
 
    end subroutine instance_build
 
-   !
-   ! Calculator accessors
-   !
+   ! Finalisation
+   subroutine instance_finalize(instance_index)
 
-   function ig_weight(model_index) result(weight)
+      integer, intent(in) :: instance_index
 
-      integer, intent(in) :: model_index
-      real(8) :: weight
+      call manager_instance_finalize(instance_index)
+
+   end subroutine instance_finalize
+
+   ! Attributes getters and setters
+   ! Wrapping weight
+   ! Strategy: WrappingStrategyDefault(
+   !     magnitude_suffix='_m',
+   ! )
+   subroutine iget_weight( &
+      instance_index, &
+      weight &
+      )
+
+      integer, intent(in) :: instance_index
+
+      real(8), intent(out) :: weight
+      ! Returning of weight
 
       type(Operator), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
       weight = instance%weight
 
-   end function ig_weight
+   end subroutine iget_weight
 
-   !
-   ! Calculator methods
-   !
+   subroutine iset_weight( &
+      instance_index, &
+      weight &
+      )
 
-   function i_calc_vec_prod_sum( &
-      model_index, &
-      a, &
-      b &
-      ) result(vec_prod_sum)
+      integer, intent(in) :: instance_index
 
-      ! Should work out consistent approach to whether we use intent or not...
-      integer :: model_index
-      real(8), dimension(3) :: a
-      real(8), dimension(3) :: b
-      real(8) :: vec_prod_sum
+      real(8), intent(in) :: weight
+      ! Passing of weight
 
       type(Operator), pointer :: instance
 
-      call manager_get_instance(model_index, instance)
+      call manager_get_instance(instance_index, instance)
 
-      !&<
-      vec_prod_sum = instance % calc_vec_prod_sum( &
-          a, &
-          b &
-          )
-      !&>
-   end function i_calc_vec_prod_sum
+      instance%weight = weight
 
-end module w_operations
+   end subroutine iset_weight
+
+   ! Wrapped methods
+   ! Wrapping vec_prod_sum
+   ! Strategy: WrappingStrategyDefault(
+   !     magnitude_suffix='_m',
+   ! )
+   subroutine i_calc_vec_prod_sum( &
+      instance_index, &
+      a, &
+      b, &
+      vec_prod_sum &
+      )
+
+      integer, intent(in) :: instance_index
+
+      real(8), dimension(3), intent(in) :: a
+      ! Passing of a
+
+      real(8), dimension(3), intent(in) :: b
+      ! Passing of b
+
+      real(8), intent(out) :: vec_prod_sum
+      ! Returning of vec_prod_sum
+
+      type(Operator), pointer :: instance
+
+      call manager_get_instance(instance_index, instance)
+
+      vec_prod_sum = instance%calc_vec_prod_sum( &
+                     a=a, &
+                     b=b &
+                     )
+
+   end subroutine i_calc_vec_prod_sum
+
+end module operations_w

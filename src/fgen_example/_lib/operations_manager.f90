@@ -1,10 +1,13 @@
 !
-! Manager for the lifecycle of the Operator calculator
+! Manager for ``operations``'s ``Operator`` derived type
 !
+! In combination with ``operations_w``,
+! this allows the ``Operator`` derived type
+! to be exposed to Python.
+!
+module operations_manager
 
-module mod_operations_manager
-   use operations, only: &
-      Operator
+   use operations, only: Operator
    use fgen_utils, only: &
       finalize_derived_type_instance_number, &
       get_derived_type_free_instance_number
@@ -12,73 +15,90 @@ module mod_operations_manager
    implicit none
    private
 
-   integer, parameter :: N_MODELS = 2048
+   integer, parameter :: N_INSTANCES = 4096
 
-   type(Operator), target, dimension(N_MODELS) :: instance_array
-   logical, dimension(N_MODELS) :: instance_available = .true.
+   type(Operator), target, dimension(N_INSTANCES) :: instance_array
+   logical, dimension(N_INSTANCES) :: instance_available = .true.
 
    public :: get_free_instance_number, &
              get_instance, &
-             instance_finalize, &
-             check_index_claimed
+             instance_finalize
 
 contains
 
-   function get_free_instance_number() result(model_index)
+   function get_free_instance_number() result(instance_index)
+      ! Get the index of a free instance
 
-      integer :: model_index
+      integer :: instance_index
+      ! Free instance index
 
       call get_derived_type_free_instance_number( &
-         model_index, &
-         N_MODELS, &
+         instance_index, &
+         N_INSTANCES, &
          instance_available, &
          instance_array &
          )
 
    end function get_free_instance_number
 
-   subroutine get_instance(model_index, instance)
-      ! Get an instance for a given model index
+   subroutine get_instance(instance_index, instance_pointer)
+      ! Associate a pointer with the instance corresponding to the given model index
       !
-      ! This will stop execution if the instance has not already been initialised
+      ! Stops execution if the instance has not already been initialised.
 
-      integer, intent(in) :: model_index
-      type(Operator), pointer, intent(inout) :: instance
+      integer, intent(in) :: instance_index
+      ! Index of the instance to point to
 
-      call check_index_claimed(model_index)
-      instance => instance_array(model_index)
+      type(Operator), pointer, intent(inout) :: instance_pointer
+      ! Pointer to associate
+
+      call check_index_claimed(instance_index)
+      instance_pointer => instance_array(instance_index)
 
    end subroutine get_instance
 
-   subroutine instance_finalize(model_index)
+   subroutine instance_finalize(instance_index)
+      ! Finalise an instance
 
-      integer, intent(in) :: model_index
+      integer, intent(in) :: instance_index
+      ! Index of the instance to finalise
 
-      call check_index_claimed(model_index)
+      call check_index_claimed(instance_index)
       call finalize_derived_type_instance_number( &
-         model_index, &
-         N_MODELS, &
+         instance_index, &
+         N_INSTANCES, &
          instance_available, &
          instance_array &
          )
 
    end subroutine instance_finalize
 
-   !
-   ! Private routines
-   !
+   subroutine check_index_claimed(instance_index)
+      ! Check that an index has already been claimed
+      !
+      ! Stops execution if the index has not been claimed.
 
-   subroutine check_index_claimed(model_index)
+      integer, intent(in) :: instance_index
+      ! Instance index to check
 
-      integer, intent(in) :: model_index
+      if (instance_available(instance_index)) then
+         print *, "Index ", instance_index, " has not been claimed"
+         error stop 1
+      end if
 
-      if (instance_available(model_index) &
-          .or. model_index < 1 &
-          .or. instance_array(model_index)%model_index < 1) then
+      if (instance_index < 1) then
          ! TODO: return error code to python
-         stop
+         print *, "Requested index is ", instance_index, " which is less than 1"
+         error stop 1
+      end if
+
+      if (instance_array(instance_index)%instance_index < 1) then
+         ! TODO: return error code to python
+         print *, "Index ", instance_index, " is associated with an instance that has instance index < 1", &
+            "instance's instance_index attribute ", instance_array(instance_index)%instance_index
+         error stop 1
       end if
 
    end subroutine check_index_claimed
 
-end module mod_operations_manager
+end module operations_manager

@@ -8,9 +8,10 @@ provides:
   # (see https://gitlab.com/magicc/fgen/-/issues/14)
   attributes:
     weight:
-      description: Weight to apply to operations
+      definition:
+        description: Weight to apply to operations
+        fortran_type: real(8)
       unit: dimensionless
-      fortran_type: real(8)
   methods:
     calc_vec_prod_sum:
       description: Calculate vector product then sum then multiply by `self % weight`
@@ -18,15 +19,18 @@ provides:
       # (see https://gitlab.com/magicc/fgen/-/issues/14)
       parameters:
         a:
-          description: first vector
+          definition:
+            description: first vector
+            fortran_type: real(8), dimension(3)
           unit: dimensionless
-          fortran_type: real(8), dimension(3)
         b:
-          description: second vector
+          definition:
+            description: second vector
+            fortran_type: real(8), dimension(3)
           unit: dimensionless
-          fortran_type: real(8), dimension(3)
       returns:
-        name: vec_prod_sum
-        description: Result of doing vector product then sum then multiplying by `self % weight`
+        definition:
+          name: vec_prod_sum
+          description: Result of doing vector product then sum then multiplying by `self % weight`
+          fortran_type: real(8)
         unit: dimensionless
-        fortran_type: real(8)

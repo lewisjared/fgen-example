@@ -5,27 +5,33 @@ provides:
   description: An example of a derived type
   attributes:
     base:
-      description: Base value
+      definition:
+        description: Base value
+        fortran_type: real(8)
       unit: m
-      fortran_type: real(8)
   methods:
     add:
       description: Add another value to `self.base`
       parameters:
         other:
-          description: Quantity to add
+          definition:
+            description: Quantity to add
+            fortran_type: real(8)
           unit: m
-          fortran_type: real(8)
+
       returns:
-        name: output
-        description: Sum of `self.base` and `other`
+        definition:
+          name: output
+          description: Sum of `self.base` and `other`
+          fortran_type: real(8)
         unit: m
-        fortran_type: real(8)
+
     double:
       description: Double `self.base`
       parameters: {}
       returns:
-        name: output
-        description: Double `self.base`
+        definition:
+          name: output
+          description: Double `self.base`
+          fortran_type: real(8)
         unit: m
-        fortran_type: real(8)
