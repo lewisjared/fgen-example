@@ -27,23 +27,17 @@ manually specified. See the poetry docs for the [list of available bump rules](h
 The steps required are the following:
 
 
-1. Bump the version: manually trigger the "bump" stage from the latest commit
-   in main (pipelines are [here](https://gitlab.com/magicc/fgen-example/-/pipelines)).
-   A valid "bump_rule" (see https://python-poetry.org/docs/cli/#version)
-   will need to be specified via the "BUMP_RULE" CI
-   variable (see https://docs.gitlab.com/ee/ci/variables/). This will then
-   trigger a release, including publication to PyPI.
+1. Bump the version: manually trigger the "bump" workflow from the main branch
+   (see here: https://github.com/lewisjared/fgen-example/actions/workflows/bump.yaml).
+   A valid "bump_rule" (see https://python-poetry.org/docs/cli/#version) will need to be specified.
+   This will then trigger a draft release.
 
-1. Download the artefacts from the release job. The `release_notes.md` artefact
-   will be pre-filled with the list of changes included in this release. You find it
-   in the release-bundle zip file at
-   [the artefacts section](https://gitlab.com/magicc/fgen-example/-/artifacts). The
-   announcements section should be completed manually to highlight any
-   particularly notable changes or other announcements (or deleted if not
-   relevant for this release).
-
-1. Once the release notes are filled out, use them to make a
-   [release](https://gitlab.com/magicc/fgen-example/-/releases/new).
+1. Edit the draft release which has been created
+   (see here:
+   https://github.com/lewisjared/fgen-example/releases).
+   Once you are happy with the release (removed placeholders, added key
+   announcements etc.) then hit 'Publish release'. This triggers a release to
+   PyPI (which you can then add to the release if you want).
 
 
 1. That's it, release done, make noise on social media of choice, do whatever
