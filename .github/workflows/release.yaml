@@ -9,9 +9,13 @@ defaults:
     shell: bash
 
 jobs:
-  draft-release:
-    name: Create draft release
+  generate-wheels:
+    uses: ./.github/workflows/wheels.yml
+
+  test-repository:
+    name: Verifies that the tests pass
     runs-on: ubuntu-latest
+    needs: [ generate-wheels ]
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
@@ -22,15 +26,28 @@ jobs:
           python-version: "3.11"
           venv-id: "release"
           poetry-dependency-install-flags: "--all-extras"
+      - name: Run tests
+        run: |
+          poetry run pytest -r a -v src tests --doctest-modules
+
+  draft-release:
+    name: Create draft release
+    runs-on: ubuntu-latest
+    needs: [ generate-wheels, test-repository ]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
       - name: Add version to environment
         run: |
           PROJECT_VERSION=$(poetry version --short)
           echo "PROJECT_VERSION=$PROJECT_VERSION" >> $GITHUB_ENV
-      - name: Run tests
-        run: |
-          poetry run pytest -r a -v src tests --doctest-modules
-      - name: Generate wheels
-        uses: ./.github/workflows/wheels.yml
       - uses: actions/download-artifact@v4
         with:
           pattern: cibw-*
