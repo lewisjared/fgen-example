@@ -19,6 +19,14 @@ of rst and use slightly different categories.
 
 <!-- towncrier release notes start -->
 
+## fgen_example v0.3.0 (2024-04-11)
+
+
+### Improvements
+
+- Testing the build and release process for wheels ([#4](https://github.com/lewisjared/fgen-example/pulls/4))
+
+
 ## fgen_example v0.2.1a12 (2024-04-11)
 
 
