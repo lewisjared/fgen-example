@@ -19,6 +19,12 @@ of rst and use slightly different categories.
 
 <!-- towncrier release notes start -->
 
+## fgen_example v0.2.1a4 (2024-04-11)
+
+
+No significant changes.
+
+
 ## fgen_example v0.2.1a2 (2024-04-11)
 
 
