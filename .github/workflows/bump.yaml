@@ -52,8 +52,9 @@ jobs:
 
           # Bump
           BASE_VERSION=`poetry version -s`
-          NEW_VERSION=`poetry version -s ${{ github.event.inputs.bump_rule }}`
+          NEW_VERSION=`poetry version -s ${{ github.event.inputs.bump_rule }} --dry-run`
           echo "Bumping version $BASE_VERSION > $NEW_VERSION"
+          sed -i "s/version = \"$BASE_VERSION\"/version = \"$NEW_VERSION\"/g" pyproject.toml
           poetry run towncrier build --yes --version v$NEW_VERSION
           git commit -a -m "bump: version $BASE_VERSION -> $NEW_VERSION"
           git tag v$NEW_VERSION
@@ -61,7 +62,8 @@ jobs:
           # Bump to alpha (so that future commits do not have the same
           # version as the tagged commit)
           BASE_VERSION=`poetry version -s`
-          NEW_VERSION=`poetry version -s prerelease`
+          NEW_VERSION=`poetry version -s prerelease --dry-run`
           echo "Bumping version $BASE_VERSION > $NEW_VERSION"
+          sed -i "s/version = \"$BASE_VERSION\"/version = \"$NEW_VERSION\"/g" pyproject.toml
           git commit -a -m "bump(pre-release): version $BASE_VERSION > $NEW_VERSION"
           git push && git push --tags
