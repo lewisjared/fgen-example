@@ -121,6 +121,7 @@ class Operator(FinalizableWrapperBase):
         --------
         :meth:`OperatorContext.from_build_args`
         """
+
         out = cls.from_new_connection()
         execute_finalize_on_fail(
             out,
@@ -331,6 +332,7 @@ class OperatorNoSetters(FinalizableWrapperBase):
         --------
         :meth:`OperatorNoSettersContext.from_build_args`
         """
+
         out = cls.from_new_connection()
         execute_finalize_on_fail(
             out,

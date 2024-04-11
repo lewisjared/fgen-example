@@ -7,98 +7,98 @@
 !
 module operations_manager
 
-   use operations, only: Operator
-   use fgen_utils, only: &
-      finalize_derived_type_instance_number, &
-      get_derived_type_free_instance_number
+    use operations, only: Operator
+    use fgen_utils, only: &
+        finalize_derived_type_instance_number, &
+        get_derived_type_free_instance_number
 
-   implicit none
-   private
+    implicit none
+    private
 
-   integer, parameter :: N_INSTANCES = 4096
+    integer, parameter :: N_INSTANCES = 4096
 
-   type(Operator), target, dimension(N_INSTANCES) :: instance_array
-   logical, dimension(N_INSTANCES) :: instance_available = .true.
+    type(Operator), target, dimension(N_INSTANCES) :: instance_array
+    logical, dimension(N_INSTANCES) :: instance_available = .true.
 
-   public :: get_free_instance_number, &
-             get_instance, &
-             instance_finalize
+    public :: get_free_instance_number, &
+              get_instance, &
+              instance_finalize
 
 contains
 
-   function get_free_instance_number() result(instance_index)
-      ! Get the index of a free instance
+    function get_free_instance_number() result(instance_index)
+        ! Get the index of a free instance
 
-      integer :: instance_index
-      ! Free instance index
+        integer :: instance_index
+        ! Free instance index
 
-      call get_derived_type_free_instance_number( &
-         instance_index, &
-         N_INSTANCES, &
-         instance_available, &
-         instance_array &
-         )
+        call get_derived_type_free_instance_number( &
+            instance_index, &
+            N_INSTANCES, &
+            instance_available, &
+            instance_array &
+            )
 
-   end function get_free_instance_number
+    end function get_free_instance_number
 
-   subroutine get_instance(instance_index, instance_pointer)
-      ! Associate a pointer with the instance corresponding to the given model index
-      !
-      ! Stops execution if the instance has not already been initialised.
+    subroutine get_instance(instance_index, instance_pointer)
+        ! Associate a pointer with the instance corresponding to the given model index
+        !
+        ! Stops execution if the instance has not already been initialised.
 
-      integer, intent(in) :: instance_index
-      ! Index of the instance to point to
+        integer, intent(in) :: instance_index
+        ! Index of the instance to point to
 
-      type(Operator), pointer, intent(inout) :: instance_pointer
-      ! Pointer to associate
+        type(Operator), pointer, intent(inout) :: instance_pointer
+        ! Pointer to associate
 
-      call check_index_claimed(instance_index)
-      instance_pointer => instance_array(instance_index)
+        call check_index_claimed(instance_index)
+        instance_pointer => instance_array(instance_index)
 
-   end subroutine get_instance
+    end subroutine get_instance
 
-   subroutine instance_finalize(instance_index)
-      ! Finalise an instance
+    subroutine instance_finalize(instance_index)
+        ! Finalise an instance
 
-      integer, intent(in) :: instance_index
-      ! Index of the instance to finalise
+        integer, intent(in) :: instance_index
+        ! Index of the instance to finalise
 
-      call check_index_claimed(instance_index)
-      call finalize_derived_type_instance_number( &
-         instance_index, &
-         N_INSTANCES, &
-         instance_available, &
-         instance_array &
-         )
+        call check_index_claimed(instance_index)
+        call finalize_derived_type_instance_number( &
+            instance_index, &
+            N_INSTANCES, &
+            instance_available, &
+            instance_array &
+            )
 
-   end subroutine instance_finalize
+    end subroutine instance_finalize
 
-   subroutine check_index_claimed(instance_index)
-      ! Check that an index has already been claimed
-      !
-      ! Stops execution if the index has not been claimed.
+    subroutine check_index_claimed(instance_index)
+        ! Check that an index has already been claimed
+        !
+        ! Stops execution if the index has not been claimed.
 
-      integer, intent(in) :: instance_index
-      ! Instance index to check
+        integer, intent(in) :: instance_index
+        ! Instance index to check
 
-      if (instance_available(instance_index)) then
-         print *, "Index ", instance_index, " has not been claimed"
-         error stop 1
-      end if
+        if (instance_available(instance_index)) then
+            print *, "Index ", instance_index, " has not been claimed"
+            error stop 1
+        end if
 
-      if (instance_index < 1) then
-         ! TODO: return error code to python
-         print *, "Requested index is ", instance_index, " which is less than 1"
-         error stop 1
-      end if
+        if (instance_index < 1) then
+            ! TODO: return error code to python
+            print *, "Requested index is ", instance_index, " which is less than 1"
+            error stop 1
+        end if
 
-      if (instance_array(instance_index)%instance_index < 1) then
-         ! TODO: return error code to python
-         print *, "Index ", instance_index, " is associated with an instance that has instance index < 1", &
-            "instance's instance_index attribute ", instance_array(instance_index)%instance_index
-         error stop 1
-      end if
+        if (instance_array(instance_index) % instance_index < 1) then
+            ! TODO: return error code to python
+            print *, "Index ", instance_index, " is associated with an instance that has instance index < 1", &
+                "instance's instance_index attribute ", instance_array(instance_index) % instance_index
+            error stop 1
+        end if
 
-   end subroutine check_index_claimed
+    end subroutine check_index_claimed
 
 end module operations_manager

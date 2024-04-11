@@ -18,3 +18,13 @@ of rst and use slightly different categories.
 -->
 
 <!-- towncrier release notes start -->
+
+## fgen_example v0.2.0 (2024-04-11)
+
+
+### Improvements
+
+- Add CI to the project ([#1](https://github.com/lewisjared/fgen-example/pulls/1))
+- Upgrade to fgen==0.4.1 ([#2](https://github.com/lewisjared/fgen-example/pulls/2))
+- Build a set of pre-compiled wheels for a range of Python versions
+  and operating systems. ([#3](https://github.com/lewisjared/fgen-example/pulls/3))
