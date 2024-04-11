@@ -3,13 +3,10 @@
 name: Wheel builder
 
 on:
-  # Not running wheel generation on every PR
-  #  pull_request:
+  # # Comment the line below out to build wheels for a PR i.e. debugging
+  # pull_request:
   push:
-    branches:
-      - main
-    tags:
-      - v*
+    branches: [ main ]
   workflow_dispatch:
   workflow_call:
 
@@ -63,13 +60,12 @@ jobs:
         with:
           platforms: all
 
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v2.17.0
         env:
           # configure cibuildwheel to build native archs ('auto'), and some
           # emulated ones
-          # CIBW_ARCHS_LINUX: auto aarch64
+          CIBW_ARCHS_LINUX: auto aarch64
           CIBW_ARCHS_WINDOWS: auto ARM64
           # Explicitly specifying the Ninja Generator is required for gfortran builds on Windows
           CMAKE_GENERATOR: Ninja

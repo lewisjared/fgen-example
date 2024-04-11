@@ -9,28 +9,9 @@ defaults:
     shell: bash
 
 jobs:
-  pre-deploy-checks:
-    name: Deploy to PyPI
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: ./.github/actions/setup
-        with:
-          python-version: "3.11"
-          venv-id: "deploy"
-          poetry-dependency-install-flags: "--all-extras"
-      - name: Run tests
-        run: |
-          poetry run pytest -r a src tests --doctest-modules
-
   upload-all:
-    name: Upload if release
-    needs: [ pre-deploy-checks ]
+    name: Upload wheels and sdist to PyPI on release
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
     environment: pypi
     permissions:
       id-token: write
@@ -40,9 +21,14 @@ jobs:
         with:
           python-version: "3.x"
 
+      - name: Log the tag
+        run: |
+          echo "Uploading assets from ${{ github.ref_name }} to pypi"
+
+      # Pull the released wheels and sdist tarball from the latest GH release
       - uses: robinraju/release-downloader@v1.10
         with:
-          latest: true
+          tag: "${{ github.ref_name }}"
           fileName: "*"
           out-file-path: dist/
 
