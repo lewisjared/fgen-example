@@ -3,7 +3,8 @@
 name: Wheel builder
 
 on:
-  pull_request:
+  # Not running wheel generation on every PR
+  #  pull_request:
   push:
     branches:
       - main
