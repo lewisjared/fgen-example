@@ -1,7 +1,7 @@
 # TODO: work out how to do this well (https://gitlab.com/magicc/copier-fgen-based-repository/-/issues/1)
 [project]
 name = "fgen-example"
-version = "0.3.0"
+version = "0.3.1a0"
 description = "Example project using fgen to wrap a simple module"
 readme = "README.md"
 authors = [{name = "Jared Lewis, email = jared.lewis@climate-resource.com"}]
@@ -20,7 +20,7 @@ dependencies = [
 
 [tool.poetry]
 name = "fgen-example"
-version = "0.3.0"
+version = "0.3.1a0"
 description = "Example project using fgen to wrap a simple module"
 readme = "README.md"
 authors = ["Jared Lewis <jared.lewis@climate-resource.com>"]
