@@ -48,8 +48,6 @@ jobs:
           # configure cibuildwheel to build native archs ('auto'), and some
           # emulated ones
           CIBW_ARCHS_LINUX: auto aarch64
-          # Use Ninja for generating the Windows project
-          CIBW_BEFORE_ALL: set CMAKE_ARGS="-GNinja"
 
       - uses: actions/upload-artifact@v4
         with:
