@@ -23,8 +23,8 @@ jobs:
         os: [ubuntu-latest, macos-13, macos-14]
         toolchain: [{compiler: gcc, version: 12}]
         include:
-          - os: windows-latest
-            toolchain: { compiler: intel, version: 2024.1 }
+          - os: windows-2022
+            toolchain: { compiler: intel, version: '2024.1' }
 
     steps:
       - uses: actions/checkout@v4
