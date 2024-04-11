@@ -277,7 +277,5 @@ manylinux-x86_64-image = "manylinux_2_28"
 test-command = "python -c 'from fgen_example.derived_type import DerivedType; print(DerivedType.from_new_connection())'"
 
 [tool.cibuildwheel.windows]
-# Use Ninja for generating the Windows project
-# This is needed because we are using gfortran
-before-all = "set CMAKE_GENERATOR=Ninja"
+before-all = ""
 before-build = ""

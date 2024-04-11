@@ -12,6 +12,23 @@ on:
     workflow_dispatch:
 
 jobs:
+  build_sdist:
+    name: Build SDist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build SDist
+        run: pipx run build --sdist
+
+      - name: Check metadata
+        run: pipx run twine check dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: dist/*.tar.gz
+
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -48,6 +65,8 @@ jobs:
           # configure cibuildwheel to build native archs ('auto'), and some
           # emulated ones
           CIBW_ARCHS_LINUX: auto aarch64
+          CIBW_ARCHS_WINDOWS: auto ARM64
+          CMAKE_GENERATOR: Ninja
 
       - uses: actions/upload-artifact@v4
         with:
