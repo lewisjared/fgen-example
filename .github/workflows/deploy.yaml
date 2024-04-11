@@ -9,7 +9,7 @@ defaults:
     shell: bash
 
 jobs:
-  deploy-pypi:
+  pre-deploy-checks:
     name: Deploy to PyPI
     runs-on: ubuntu-latest
     steps:
@@ -25,10 +25,25 @@ jobs:
       - name: Run tests
         run: |
           poetry run pytest -r a src tests --doctest-modules
-      - name: Publish to PyPI
-        env:
-          PYPI_TOKEN: "${{ secrets.PYPI_TOKEN }}"
 
-        run: |
-          poetry config pypi-token.pypi $PYPI_TOKEN
-          poetry publish --build --no-interaction
+  upload-all:
+    name: Upload if release
+    needs: [ build_wheels, build_sdist, pre-deploy-checks ]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+    environment: pypi
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cibw-*
+          merge-multiple: true
+          path: dist
+
+      - uses: pypa/gh-action-pypi-publish@release/v1

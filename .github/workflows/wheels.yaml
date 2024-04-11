@@ -1,0 +1,79 @@
+# Workflow to build and test wheels
+# See [cibuildwheel](https://cibuildwheel.pypa.io/en/stable/) for additional configuration options
+name: Wheel builder
+
+on:
+  # Not running wheel generation on every PR
+  #  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+    workflow_dispatch:
+
+jobs:
+  build_sdist:
+    name: Build SDist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build SDist
+        run: pipx run build --sdist
+
+      - name: Check metadata
+        run: pipx run twine check dist/*
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: dist/*.tar.gz
+
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # Ensure that a wheel builder finishes even if another fails
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          # Disabling Windows build until https://gitlab.com/magicc/fgen/-/issues/79 is resolved
+          # - windows-latest
+          # macos-13 is an intel runner, macos-14 is apple silicon
+          - macos-13
+          - macos-14
+        # Using the same version of gcc for all builds
+        toolchain: [{compiler: gcc, version: 12}]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: fortran-lang/setup-fortran@v1
+        id: setup-fortran
+        with:
+          compiler: ${{ matrix.toolchain.compiler }}
+          version: ${{ matrix.toolchain.version }}
+
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+
+
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.17.0
+        env:
+          # configure cibuildwheel to build native archs ('auto'), and some
+          # emulated ones
+          CIBW_ARCHS_LINUX: auto aarch64
+          CIBW_ARCHS_WINDOWS: auto ARM64
+          # Explicitly specifying the Ninja Generator is required for gfortran builds on Windows
+          CMAKE_GENERATOR: Ninja
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
+          path: ./wheelhouse/*.whl
