@@ -10,7 +10,7 @@ defaults:
 
 jobs:
   generate-wheels:
-    uses: ./.github/workflows/wheels.yml
+    uses: .github/workflows/wheels.yml
 
   test-repository:
     name: Verifies that the tests pass
