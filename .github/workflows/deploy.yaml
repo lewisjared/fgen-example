@@ -28,7 +28,7 @@ jobs:
 
   upload-all:
     name: Upload if release
-    needs: [ build_wheels, build_sdist, pre-deploy-checks ]
+    needs: [ pre-deploy-checks ]
     runs-on: ubuntu-latest
     if: github.event_name == 'release' && github.event.action == 'published'
     environment: pypi
@@ -40,10 +40,10 @@ jobs:
         with:
           python-version: "3.x"
 
-      - uses: actions/download-artifact@v4
+      - uses: robinraju/release-downloader@v1.10
         with:
-          pattern: cibw-*
-          merge-multiple: true
-          path: dist
+          latest: true
+          fileName: "*"
+          out-file-path: dist/
 
       - uses: pypa/gh-action-pypi-publish@release/v1
