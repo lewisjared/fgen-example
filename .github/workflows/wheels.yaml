@@ -36,12 +36,15 @@ jobs:
       # Ensure that a wheel builder finishes even if another fails
       fail-fast: false
       matrix:
-        # macos-13 is an intel runner, macos-14 is apple silicon
-        os: [ubuntu-latest, windows-latest, macos-13, macos-14]
+        os:
+          - ubuntu-latest
+          # Disabling Windows build until https://gitlab.com/magicc/fgen/-/issues/79 is resolved
+          # - windows-latest
+          # macos-13 is an intel runner, macos-14 is apple silicon
+          - macos-13
+          - macos-14
+        # Using the same version of gcc for all builds
         toolchain: [{compiler: gcc, version: 12}]
-#        include:
-#          - os: windows-2022
-#            toolchain: { compiler: intel, version: '2024.1' }
 
     steps:
       - uses: actions/checkout@v4
@@ -66,6 +69,7 @@ jobs:
           # emulated ones
           CIBW_ARCHS_LINUX: auto aarch64
           CIBW_ARCHS_WINDOWS: auto ARM64
+          # Explicitly specifying the Ninja Generator is required for gfortran builds on Windows
           CMAKE_GENERATOR: Ninja
 
       - uses: actions/upload-artifact@v4
