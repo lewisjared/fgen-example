@@ -171,11 +171,11 @@ known-first-party = ["fgen_example"]
 convention = "numpy"
 
 [tool.towncrier]
-package = "fgen-example"
+package = "fgen_example"
 package_dir = "src"
 filename = "docs/source/changelog.md"
 directory = "changelog/"
-title_format = "## fgen-example {version} ({project_date})"
+title_format = "## fgen_example {version} ({project_date})"
 underlines = ["", "", ""]
 issue_format = "[#{issue}](https://github.com/lewisjared/fgen-example/pulls/{issue})"
 
