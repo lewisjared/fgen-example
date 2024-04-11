@@ -20,7 +20,7 @@ dependencies = [
 
 [tool.poetry]
 name = "fgen-example"
-version = "0.2.1a2"
+version = "0.2.1a3"
 description = "Example project using fgen to wrap a simple module"
 readme = "README.md"
 authors = ["Jared Lewis <jared.lewis@climate-resource.com>"]
