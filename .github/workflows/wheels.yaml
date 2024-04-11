@@ -69,7 +69,7 @@ jobs:
         env:
           # configure cibuildwheel to build native archs ('auto'), and some
           # emulated ones
-          CIBW_ARCHS_LINUX: auto aarch64
+          # CIBW_ARCHS_LINUX: auto aarch64
           CIBW_ARCHS_WINDOWS: auto ARM64
           # Explicitly specifying the Ninja Generator is required for gfortran builds on Windows
           CMAKE_GENERATOR: Ninja
