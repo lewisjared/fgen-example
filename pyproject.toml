@@ -55,7 +55,7 @@ liccheck = "^0.9.1"
 cmakelang = "^0.6.13"
 
 [build-system]
-requires = ["scikit-build-core", "oldest-supported-numpy", "fgen[templates]==0.6.0"]
+requires = ["scikit-build-core", "numpy>=2.0.0", "fgen[templates]==0.6.0"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
