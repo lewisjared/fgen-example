@@ -17,11 +17,6 @@ from fgen_runtime.base import (
     check_initialised,
     execute_finalize_on_fail,
 )
-from fgen_runtime.formatting import (
-    to_html,
-    to_pretty,
-    to_str,
-)
 from fgen_runtime.units import verify_units
 
 try:
@@ -51,39 +46,6 @@ class Operator(FinalizableWrapperBase):
         Attributes exposed by this wrapper
         """
         return ("weight",)
-
-    def __str__(self) -> str:
-        """
-        String representation of self
-        """
-        return to_str(
-            self,
-            self.exposed_attributes,
-        )
-
-    def _repr_pretty_(self, p: Any, cycle: bool) -> None:
-        """
-        Pretty representation of self
-
-        Used by IPython notebooks and other tools
-        """
-        to_pretty(
-            self,
-            self.exposed_attributes,
-            p=p,
-            cycle=cycle,
-        )
-
-    def _repr_html_(self) -> str:
-        """
-        html representation of self
-
-        Used by IPython notebooks and other tools
-        """
-        return to_html(
-            self,
-            self.exposed_attributes,
-        )
 
     # Class methods
     @classmethod
@@ -121,7 +83,6 @@ class Operator(FinalizableWrapperBase):
         --------
         :meth:`OperatorContext.from_build_args`
         """
-
         out = cls.from_new_connection()
         execute_finalize_on_fail(
             out,
@@ -194,7 +155,7 @@ class Operator(FinalizableWrapperBase):
         #     magnitude_suffix='_m',
         # )
         weight: float = operations_w.iget_weight(
-            self.instance_index,
+            instance_index=self.instance_index,
         )
 
         return weight
@@ -234,7 +195,7 @@ class Operator(FinalizableWrapperBase):
         #     magnitude_suffix='_m',
         # )
         vec_prod_sum: float = operations_w.i_calc_vec_prod_sum(
-            self.instance_index,
+            instance_index=self.instance_index,
             a=a,
             b=b,
         )
@@ -262,39 +223,6 @@ class OperatorNoSetters(FinalizableWrapperBase):
         Attributes exposed by this wrapper
         """
         return ("weight",)
-
-    def __str__(self) -> str:
-        """
-        String representation of self
-        """
-        return to_str(
-            self,
-            self.exposed_attributes,
-        )
-
-    def _repr_pretty_(self, p: Any, cycle: bool) -> None:
-        """
-        Pretty representation of self
-
-        Used by IPython notebooks and other tools
-        """
-        to_pretty(
-            self,
-            self.exposed_attributes,
-            p=p,
-            cycle=cycle,
-        )
-
-    def _repr_html_(self) -> str:
-        """
-        html representation of self
-
-        Used by IPython notebooks and other tools
-        """
-        return to_html(
-            self,
-            self.exposed_attributes,
-        )
 
     # Class methods
     @classmethod
@@ -332,7 +260,6 @@ class OperatorNoSetters(FinalizableWrapperBase):
         --------
         :meth:`OperatorNoSettersContext.from_build_args`
         """
-
         out = cls.from_new_connection()
         execute_finalize_on_fail(
             out,
@@ -405,7 +332,7 @@ class OperatorNoSetters(FinalizableWrapperBase):
         #     magnitude_suffix='_m',
         # )
         weight: float = operations_w.iget_weight(
-            self.instance_index,
+            instance_index=self.instance_index,
         )
 
         return weight
@@ -445,7 +372,7 @@ class OperatorNoSetters(FinalizableWrapperBase):
         #     magnitude_suffix='_m',
         # )
         vec_prod_sum: float = operations_w.i_calc_vec_prod_sum(
-            self.instance_index,
+            instance_index=self.instance_index,
             a=a,
             b=b,
         )
