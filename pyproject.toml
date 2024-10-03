@@ -13,8 +13,8 @@ packages = [{include = "fgen_example", from = "src"}]
 requires-python = ">=3.10"
 dependencies = [
     "pint >= 0.22",
-    "numpy >= 0.22",
-    "fgen == 0.4.1",
+    "numpy <= 2.0.0",
+    "fgen == 0.6.0",
 ]
 
 
@@ -55,7 +55,7 @@ liccheck = "^0.9.1"
 cmakelang = "^0.6.13"
 
 [build-system]
-requires = ["scikit-build-core", "oldest-supported-numpy", "fgen[templates]==0.4.1"]
+requires = ["scikit-build-core", "numpy>=2.0.0", "fgen[templates]==0.6.0"]
 build-backend = "scikit_build_core.build"
 
 [tool.scikit-build]
