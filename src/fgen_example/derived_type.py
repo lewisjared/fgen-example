@@ -82,6 +82,7 @@ class DerivedType(FinalizableWrapperBase):
         --------
         :meth:`DerivedTypeContext.from_build_args`
         """
+
         out = cls.from_new_connection()
         execute_finalize_on_fail(
             out,
@@ -278,6 +279,7 @@ class DerivedTypeNoSetters(FinalizableWrapperBase):
         --------
         :meth:`DerivedTypeNoSettersContext.from_build_args`
         """
+
         out = cls.from_new_connection()
         execute_finalize_on_fail(
             out,

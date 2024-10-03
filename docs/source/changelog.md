@@ -19,6 +19,17 @@ of rst and use slightly different categories.
 
 <!-- towncrier release notes start -->
 
+## fgen_example v0.3.1 (2024-10-03)
+
+### Improvements
+
+- Updates fgen to v0.6.0 ([#7](https://github.com/lewisjared/fgen-example/pulls/7))
+
+### Trivial/Internal Changes
+
+- [#5](https://github.com/lewisjared/fgen-example/pulls/5), [#6](https://github.com/lewisjared/fgen-example/pulls/6)
+
+
 ## fgen_example v0.3.0 (2024-04-11)
 
 
