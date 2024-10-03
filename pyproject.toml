@@ -13,7 +13,7 @@ packages = [{include = "fgen_example", from = "src"}]
 requires-python = ">=3.10"
 dependencies = [
     "pint >= 0.22",
-    "numpy >= 0.22",
+    "numpy <= 2.0.0",
     "fgen == 0.6.0",
 ]
 
